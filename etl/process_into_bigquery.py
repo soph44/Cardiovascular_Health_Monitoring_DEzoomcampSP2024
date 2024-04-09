@@ -94,7 +94,7 @@ def process_into_bigquery(inputYear):
     print(f'Dataframe for {inputYear} read from GCS parquet file')
     
     #Drop rows where any filtered column values are NULL
-    #Replace any "Georgia" with "Georgia USA" values under column "Locationdesc"
+    #Replace any "Georgia" or "Maryland" with "Georgia USA" and "Maryland USA" values under column "Locationdesc"
     dfnew = dfnew.dropna(how='any')
     dfnew = dfnew.withColumn("Locationdesc", regexp_replace("Locationdesc", "Georgia", "Georgia USA"))
     dfnew = dfnew.withColumn("Locationdesc", regexp_replace("Locationdesc", "Maryland", "Maryland USA"))
@@ -129,9 +129,9 @@ def process_into_bigquery(inputYear):
     spark.stop()
     print(f'COMPLETED: Data processing to BigQuery for {inputYear} completed. Spark stopped.')
 
-if __name__ == "__main__":
-    process_into_bigquery(2019)
-    process_into_bigquery(2020)
-    process_into_bigquery(2021)
-    process_into_bigquery(2022)
-    process_into_bigquery(2023)
+# if __name__ == "__main__":
+#     process_into_bigquery(2019)
+#     process_into_bigquery(2020)
+#     process_into_bigquery(2021)
+#     process_into_bigquery(2022)
+#     process_into_bigquery(2023)
