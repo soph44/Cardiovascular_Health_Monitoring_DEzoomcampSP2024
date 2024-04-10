@@ -227,7 +227,7 @@ resource "google_dataproc_workflow_template" "template-2021" {
 
 resource "google_cloud_scheduler_job" "job" {
   name             = "cdc-pull-schedule"
-  description      = "test http job"
+  description      = "Yearly scheduled job trigger to pull CDC data"
   schedule         = "0 12 1 1 *"
   time_zone        = "America/Los_Angeles"
 
