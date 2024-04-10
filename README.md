@@ -178,7 +178,7 @@ This project relies on Google Cloud and Terraform for deployment.
     -run 'terraform init' from the terminal
     -run 'terraform plan' for good measure
     -run 'terraform apply'
-    -When done, run 'terraform destroy' to save resources
+    -When done, run 'terraform destroy' to save resources and prevent errors for the next user's setup.
     -Note: You may need to run these commands from the terraform directory in this project
 10. At this point, your Google Cloud project will start with a Dataproc job to process CDC data from 2019. You can view the job running in your Google Cloud console web GUI under Dataproc Clusters.
     - I have prepared two additional "Data Filling" Workflow Templates (See under console Dataproc/Workflows/Workflow Templates) that can be instantiated to run the workflow and fill in data from 2020 and 2021. This is optional to run since the project works whether or not it has data from every year.
@@ -189,7 +189,8 @@ This project relies on Google Cloud and Terraform for deployment.
     - Open this [template dashboard](https://lookerstudio.google.com/reporting/d465d4bf-5221-42d1-99d5-4940336c347d) for the dashboard template.
     - Go to Resource --> Manage added data sources --> Edit bq_output_table --> Edit connection
     - Select your project's 'bq_output_table' datasource then click Reconnect
-13. TROUBLESHOOTING:
+13. When done, please execute terraform destroy' to save resources and prevent errors   for the next user's setup.
+14. TROUBLESHOOTING:
     ONLY IF an error occurs on 'terraform apply' due to failed access to the GCS bucket, then it is likely that someone has ran this project and not run 'terraform destroy' to release the bucket name. This can be resolved by selecting a UNIQUE bucket name to replace across 3 file locations.
     - main.tf: : resource "google_storage_bucket" "NEW_BUCKET_NAME"
     - variables.tf GCS : gcs_bucket_name
