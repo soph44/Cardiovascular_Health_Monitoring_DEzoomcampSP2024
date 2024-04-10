@@ -191,8 +191,9 @@ This project relies on Google Cloud and Terraform for deployment.
     - Select your project's 'bq_output_table' datasource then click Reconnect
 13. When done, please execute terraform destroy' to save resources and prevent errors   for the next user's setup.
 14. TROUBLESHOOTING:
-    ONLY IF an error occurs on 'terraform apply' due to failed access to the GCS bucket, then it is likely that someone has ran this project and not run 'terraform destroy' to release the bucket name. This can be resolved by selecting a UNIQUE bucket name to replace across 3 file locations.
-    - main.tf: : resource "google_storage_bucket" "NEW_BUCKET_NAME"
-    - variables.tf GCS : gcs_bucket_name
-    - etl/full_workflow_gcs_bq_etl.py : bucketName
+    ONLY IF an error occurs on 'terraform apply' due to failed access to the GCS bucket. This is possible if someone has ran this project and not execute 'terraform destroy' cleanly to release the bucket name. This can be resolved by selecting a UNIQUE bucket name to replace across 3 files.
+    Search for the current bucket name [cvd-bucket-de2024] and replace it with a unique bucket name in these files:
+    - main.tf
+    - variables.tf
+    - etl/full_workflow_gcs_bq_etl.py
     

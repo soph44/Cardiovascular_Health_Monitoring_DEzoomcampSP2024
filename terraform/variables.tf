@@ -36,16 +36,18 @@ variable "dp_region" {
 
 
 
+
+# DO NOT CHANGE ANY BELOW
 variable "gcs_bucket_name" {
   description = "Unique bucket name"
   # ONLY CHANGE IF BUCKET ACCESS ERROR OCCURS
   default     = "cvd-bucket-de2024"
 }
-
-
-
-
-# DO NOT CHANGE ANY BELOW
+variable "main_python_file_uri" {
+  description = "URL to main mython file"
+  # ONLY CHANGE IF BUCKET ACCESS ERROR OCCURS
+  default = "gs://cvd-bucket-de2024/etl/full_workflow_gcs_bq_etl.py"
+}
 variable "bq_dataset_name" {
   description = "Dataset Name"
   default     = "cvd_dataset"
@@ -59,11 +61,6 @@ variable "gcs_storage_class" {
 variable "dp_cluster_name" {
   description = "Dataproc cluster name"
   default = "dp-cvd-cluster"
-}
-
-variable "main_python_file_uri" {
-  description = "URL to main mython file"
-  default = "gs://cvd-bucket-de2024/etl/full_workflow_gcs_bq_etl.py"
 }
 
 variable "wf_template_name" {
