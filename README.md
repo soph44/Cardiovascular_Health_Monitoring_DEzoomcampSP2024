@@ -127,7 +127,7 @@ This project relies on Google Cloud and Terraform for deployment.
 2. Ensure you have a Google Cloud account.
 3. Create a new project. 
 4. Create a Service Account with an exported Key in a .json format. This is the exact same as the course instructions on setting up Terraform and Google Cloud.
-    - Under Google IAM, provide the following roles to the Service Account: BigQuery Admin, BigQuery Connection Admin, Cloud Service Agent, Cloud Scheduler Admin, Compute Admin, Compute Engine Service Agent, Dataproc Administrator, Dataproc Service Agent, Dataproc Worker, IAM OAuth Client Admin, Service Account User, Storage Admin.
+    - Under Google IAM, provide the following roles to the Service Account: BigQuery Admin, BigQuery Connection Admin, Cloud Run Service Agent, Cloud Scheduler Admin, Compute Admin, Compute Engine Service Agent, Dataproc Administrator, Dataproc Service Agent, Dataproc Worker, IAM OAuth Client Admin, Service Account User, Storage Admin.  
         -Note: For this project demonstration, custom roles were not made so existig roles were used.
     - Note the location of where you end up placing the Key file. This will be used in the Terraform variables file.
 5. Ensure you have Terraform installed. Follow the class video on Terraform if not.
@@ -139,24 +139,59 @@ This project relies on Google Cloud and Terraform for deployment.
     - Region (region)
         - Note that Cloud Schedular is not available in all regions. Run 'gcloud scheduler locations list' to check.
     - dataproc region (dp_region)
-    - GCS Bucket Name (gcs_bucket_name)
 7. Update the following variables in the etl/full_workflow_gcs_bq_etl.py file to match your Terraform variables:
     - projectID
-    - bucketName
-8. Start and apply Terraform
+8. Ensure the following Google APIs are enabled. I recommend going to the product pages for Dataproc, Compute Engine, and Cloud Scheduler to enable those APIs first as then checking which APIs are missing. Then the most thorough way to dcomplete the list is to go to your APIs & Services console product page --> click +ENABLE APIS AND SERVICES --> Then search up and check that each missing API:
+    - Analytics Hub API
+    - BigQuery API
+    - Big Query Connection API
+    - Analytics Hub API
+    - BigQuery API
+    - BigQuery Connection API
+    - BigQuery Data Policy API
+    - BigQuery Migration API
+    - BigQuery Reservation API
+    - BigQuery Storage API
+    - Cloud Dataplex API
+    - Cloud Dataproc API
+    - Cloud Dataproc Control API PRIVATE (Note, this API is not searchable, but should be enabled after going through the earlier product pages)
+    - Cloud Datastore API
+    - Cloud Logging API
+    - Cloud Monitoring API
+    - Cloud OS Login API
+    - Cloud Resource Manager API (Likely need to enable this one individually)
+    - Cloud Scheduler API
+    - Cloud SQL
+    - Cloud Storage
+    - Cloud Storage API
+    - Cloud Trace API
+    - Compute Engine API
+    - Dataform API
+    - Google Cloud APIs
+    - Google Cloud Storage JSON API
+    - IAM Service Account Credentials API (Likely need to enable this one individually)
+    - Identity and Access Management (IAM) API (Likely need to enable this one individually)
+    - Service Management API
+    - Service Usage API
+    
+9. Start and apply Terraform
     -run 'terraform init' from the terminal
     -run 'terraform plan' for good measure
     -run 'terraform apply'
     -When done, run 'terraform destroy' to save resources
     -Note: You may need to run these commands from the terraform directory in this project
-9. At this point, your Google Cloud project will start with a Dataproc job to process CDC data from 2019. You can view the job running in your Google Cloud console web GUI under Dataproc Clusters.
+10. At this point, your Google Cloud project will start with a Dataproc job to process CDC data from 2019. You can view the job running in your Google Cloud console web GUI under Dataproc Clusters.
     - I have prepared two additional "Data Filling" Workflow Templates (See under console Dataproc/Workflows/Workflow Templates) that can be instantiated to run the workflow and fill in data from 2020 and 2021. This is optional to run since the project works whether or not it has data from every year.
         - Note: Attempting to run more than one job at a time may run an error with processing quota on your Google Cloud account. For example, if you try to run both of these Data Filling jobs at the same time.
     - There is also a template workflow that can be used to fill in data from 2 years ago. This was written this way because 2023 and 2024 do not have much data yet. So it's as if we're pretending the current year is 2022 for demonstrations sake. There is no need to instantiate this template workflow because it will be kicked off by Cloud Scheduler.
         -Instead of waiting for the Scheduler to start the job, you may go into the UI to force the job to start. Go to Google Cloud Scheduler in the console and there will be a 'cdc-pull-schedule' job. Under Actions, click 'Force Run'.
-10. Preparing a dashboard based off your BigQuery dataset. Open the dashboard from [here](https://lookerstudio.google.com/reporting/ae5bba68-1d5f-4a30-a5e1-f2b41f90921f).
+12. Preparing a dashboard based off your BigQuery dataset. Open the dashboard from [here](https://lookerstudio.google.com/reporting/ae5bba68-1d5f-4a30-a5e1-f2b41f90921f).
     - Open this [template dashboard](https://lookerstudio.google.com/reporting/d465d4bf-5221-42d1-99d5-4940336c347d) for the dashboard template.
     - Go to Resource --> Manage added data sources --> Edit bq_output_table --> Edit connection
     - Select your project's 'bq_output_table' datasource then click Reconnect
-
+13. TROUBLESHOOTING:
+    ONLY IF an error occurs on 'terraform apply' due to failed access to the GCS bucket, then it is likely that someone has ran this project and not run 'terraform destroy' to release the bucket name. This can be resolved by selecting a UNIQUE bucket name to replace across 3 file locations.
+    - main.tf: : resource "google_storage_bucket" "NEW_BUCKET_NAME"
+    - variables.tf GCS : gcs_bucket_name
+    - etl/full_workflow_gcs_bq_etl.py : bucketName
     

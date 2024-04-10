@@ -14,7 +14,7 @@ from google.cloud import bigquery as bq
 
 
 projectID = "cvd-sp-de-zoomcamp-2024" # <--- CHANGE TO YOUR PROJECT ID USED IN TERRAFORM
-bucketName = 'cvd-bucket-de2024' # <--- CHANGE TO YOUR BUCKET NAME USED IN TERRAFORM
+bucketName = 'cvd-bucket-de2024' # <--- ONLY CHANGE IF BUCKET ACCESS ERROR OCCURS ON TERRAFORM APPLY
 
 # Determines year to process into pipeline
 # Note if data already exists for a specific year, the script will exit
@@ -145,7 +145,7 @@ else:
 blob = bucket.blob(filename_pq)
 blob.upload_from_filename(f'./data/pq/{filename_pq}')
 
-#Remove local files
+#Remove .csv files
 os.remove(f'./data/{filename}')
 os.remove(f'./data/pq/{filename_pq}')
 print(f'COMPLETED: Downloaded CDC CVD Data for {inputYear} to GCS')

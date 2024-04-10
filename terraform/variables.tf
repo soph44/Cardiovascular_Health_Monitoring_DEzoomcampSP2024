@@ -33,9 +33,12 @@ variable "dp_region" {
   default     = "us-west1"
 }
 
+
+
+
 variable "gcs_bucket_name" {
   description = "Unique bucket name"
-  # Change. Remember to change in the Python script too.
+  # ONLY CHANGE IF BUCKET ACCESS ERROR OCCURS
   default     = "cvd-bucket-de2024"
 }
 
